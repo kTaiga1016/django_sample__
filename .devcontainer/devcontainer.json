@@ -3,10 +3,9 @@
 {
   "name": "Existing Docker Compose (Extend)",
   "dockerComposeFile": [
-    "../docker-compose.yml",
-    "docker-compose.yml"
+    "../docker-compose.yml"
   ],
-  "service": "web",
+  "service": "app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
   "customizations": {

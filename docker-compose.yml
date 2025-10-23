@@ -3,33 +3,43 @@ version: "3.9"
 services:
   db:
     image: mysql:8.0
-    container_name: django_mysql_db
+    container_name: django_sample_mysql_db 
     restart: always
     environment:
+      # ↓ 以前エラーになった部分。正しいマッピング形式で記述が必要です。
       MYSQL_DATABASE: mydb
       MYSQL_USER: myuser
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: rootroot
+      # ↑ 環境変数とその値
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
-      - db_data:/var/lib/mysql
+      - django_sample_db_data:/var/lib/mysql
 
-  web:
+  app: # サービス名を 'app' に統一
     build: .
-    container_name: django_web
+    container_name: django_sample_web_app # コンテナ名を定義
+    
+    # コンテナを永続化するコマンド
+    command: /bin/sh -c "while sleep 1000; do :; done" 
+    
     volumes:
-      - ./app:/code
+      - ..:/workspaces:cached 
+    
     ports:
-      - "8000:8000"
+      - "8080:8000" 
+      
     depends_on:
       - db
+      
     environment:
+      # ↓ 'app' サービスも環境変数が必要です。
       DB_NAME: mydb
       DB_USER: myuser
-      DB_PASSWORD: mypassword
+      DB_PASSWORD: password
       DB_HOST: db
       DB_PORT: 3306
 
 volumes:
-  db_data:
+  django_sample_db_data:
